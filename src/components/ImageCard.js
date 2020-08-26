@@ -5,6 +5,8 @@ class ImageCard extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = { spans: 0 };
+
     // Direct access to a single DOM Element
     // Assign to instance variable and pass to a JSX element as props
     this.imageRef = React.createRef();
@@ -15,14 +17,19 @@ class ImageCard extends React.Component {
     this.imageRef.current.addEventListener('load', this.setSpans);
   }
 
+  // Find how many spans each image takes
   setSpans = () => {
-    console.log(this.imageRef.current.clientHeight);
+    const height = this.imageRef.current.clientHeight;
+
+    const spans = Math.ceil(height / 150);
+
+    this.setState({ spans });
   };
 
   render() {
     const { description, urls } = this.props.image;
     return (
-      <div>
+      <div style={{ gridRowEnd: `span ${this.state.span}` }}>
         <img ref={this.imageRef} alt={description} src={urls.regular} />
       </div>
     );
